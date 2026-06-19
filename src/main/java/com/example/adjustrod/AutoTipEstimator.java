@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.ItemStack;
@@ -61,18 +61,18 @@ public final class AutoTipEstimator {
 				return;
 			}
 
-			ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(stack.getItem());
+			Identifier itemId = BuiltInRegistries.ITEM.getKey(stack.getItem());
 			ResourceManager rm = mc.getResourceManager();
 
 			// Prefer the "_cast" model since that is what is shown while a line is out.
 			JsonObject model = null;
-			ResourceLocation usedLoc = null;
+			Identifier usedLoc = null;
 			String[] candidates = {
 					"models/item/" + itemId.getPath() + "_cast.json",
 					"models/item/" + itemId.getPath() + ".json"
 			};
 			for (String path : candidates) {
-				ResourceLocation loc = ResourceLocation.fromNamespaceAndPath(itemId.getNamespace(), path);
+				Identifier loc = Identifier.fromNamespaceAndPath(itemId.getNamespace(), path);
 				Optional<Resource> res = rm.getResource(loc);
 				if (res.isPresent()) {
 					JsonObject candidate = readJson(res.get());
@@ -185,8 +185,8 @@ public final class AutoTipEstimator {
 		if (layer0 == null) {
 			return null;
 		}
-		ResourceLocation tex = ResourceLocation.parse(layer0);
-		ResourceLocation texLoc = ResourceLocation.fromNamespaceAndPath(tex.getNamespace(), "textures/" + tex.getPath() + ".png");
+		Identifier tex = Identifier.parse(layer0);
+		Identifier texLoc = Identifier.fromNamespaceAndPath(tex.getNamespace(), "textures/" + tex.getPath() + ".png");
 		Optional<Resource> res = rm.getResource(texLoc);
 		if (res.isEmpty()) {
 			return null;
@@ -263,8 +263,8 @@ public final class AutoTipEstimator {
 		if (parentRef == null || parentRef.startsWith("builtin/")) {
 			return null;
 		}
-		ResourceLocation ref = ResourceLocation.parse(parentRef);
-		ResourceLocation loc = ResourceLocation.fromNamespaceAndPath(ref.getNamespace(), "models/" + ref.getPath() + ".json");
+		Identifier ref = Identifier.parse(parentRef);
+		Identifier loc = Identifier.fromNamespaceAndPath(ref.getNamespace(), "models/" + ref.getPath() + ".json");
 		Optional<Resource> res = rm.getResource(loc);
 		return res.map(AutoTipEstimator::readJson).orElse(null);
 	}

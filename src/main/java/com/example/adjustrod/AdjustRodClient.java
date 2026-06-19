@@ -2,8 +2,8 @@ package com.example.adjustrod;
 
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.network.chat.Component;
 
@@ -24,26 +24,26 @@ public class AdjustRodClient implements ClientModInitializer {
 		AdjustRodConfig.load();
 
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
-				dispatcher.register(ClientCommandManager.literal("adjustrod")
-						.then(ClientCommandManager.literal("show")
+				dispatcher.register(ClientCommands.literal("adjustrod")
+						.then(ClientCommands.literal("show")
 								.executes(ctx -> {
 									show(ctx.getSource());
 									return 1;
 								}))
-						.then(ClientCommandManager.literal("reset")
+						.then(ClientCommands.literal("reset")
 								.executes(ctx -> {
 									AdjustRodConfig.set(0.0, 0.0, 0.0);
 									ctx.getSource().sendFeedback(Component.literal("[adjustrod] Offset reset to 0, 0, 0."));
 									return 1;
 								}))
-						.then(ClientCommandManager.literal("auto")
+						.then(ClientCommands.literal("auto")
 								.executes(ctx -> {
 									AutoTipEstimator.run(ctx.getSource());
 									return 1;
 								}))
-						.then(ClientCommandManager.argument("x", DoubleArgumentType.doubleArg())
-								.then(ClientCommandManager.argument("y", DoubleArgumentType.doubleArg())
-										.then(ClientCommandManager.argument("z", DoubleArgumentType.doubleArg())
+						.then(ClientCommands.argument("x", DoubleArgumentType.doubleArg())
+								.then(ClientCommands.argument("y", DoubleArgumentType.doubleArg())
+										.then(ClientCommands.argument("z", DoubleArgumentType.doubleArg())
 												.executes(ctx -> {
 													double x = DoubleArgumentType.getDouble(ctx, "x");
 													double y = DoubleArgumentType.getDouble(ctx, "y");
