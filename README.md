@@ -47,7 +47,7 @@ Minecraft 26.1 is the first **unobfuscated** version, so the modding stack is ne
 | **IntelliJ IDEA** | **2025.3 or newer** (required for Java 25 + Mixins to work) |
 | Gradle | 9.4.1 (handled by the wrapper config — IntelliJ will download it) |
 | Fabric Loom | `1.16-SNAPSHOT` (the new `net.fabricmc.fabric-loom` plugin, no remapping) |
-| Fabric Loader | 0.19.2 |
+| Fabric Loader | 0.18.6 |
 | Fabric API | `0.145.4+26.1.1` |
 
 ### Install JDK 25
@@ -85,7 +85,7 @@ launch a dev client with the mod loaded, handy for testing without copying the j
 
 ## 4. Install & use
 
-1. Make sure **Fabric Loader 0.19.2+** and **Fabric API `0.145.4+26.1.1`** are installed for 26.1.1.
+1. Make sure **Fabric Loader 0.18.6+** and **Fabric API `0.145.4+26.1.1`** are installed for 26.1.1.
 2. Drop `adjustrod-1.0.0.jar` into your `.minecraft/mods` folder (alongside Fabric API).
 3. Launch, load a world, hold your rod and cast.
 4. Tune:
