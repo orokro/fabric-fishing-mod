@@ -7,10 +7,11 @@ hard-coded hand position.
 You tune it live in-game with a command, and the value is saved so it persists across restarts.
 
 ```
-/adjustrod <x> <y> <z>   set the offset (right, up, forward) — applies instantly and saves
-/adjustrod show          print the current offset
-/adjustrod reset         back to 0 0 0
-/adjustrod auto          experimental: estimate the offset from your rod's model
+/adjustrod <x> <y> <z>         set the FIRST-person offset (right, up, forward) — applies instantly and saves
+/adjustrod third <x> <y> <z>   set the THIRD-person offset — applies instantly and saves
+/adjustrod show                print both offsets
+/adjustrod reset               set both back to 0 0 0
+/adjustrod auto                experimental: estimate the first-person offset from your rod's model
 ```
 
 ---
@@ -21,19 +22,22 @@ When you cast, the game draws the line from a point returned by
 `FishingHookRenderer.getPlayerHandPos(...)`. This mod adds your offset to that point via a Mixin, so
 the line starts where *you* tell it to.
 
-The offset is **camera-relative**, which is what makes a single Vector3 usable in most cases:
+There are **two independent offsets**, because the rod is positioned differently depending on the view:
 
-- **x = right** — positive shifts the origin to the right of where you're looking
-- **y = up** — positive shifts it up
-- **z = forward** — positive pushes it further out along your look direction
+- **First person** (`/adjustrod x y z`) — the rod is attached to the camera, so this offset is
+  applied in a **camera-relative** frame: `x` = right of where you look, `y` = up, `z` = forward along
+  your look direction. It's rotated by your view every frame, so it tracks as you look around.
+- **Third person** (`/adjustrod third x y z`) — the rod hangs off your body, so this offset is applied
+  in a **body-relative** frame: `x` = right of your body's facing, `y` = world up, `z` = forward of your
+  body's facing. This matches how vanilla anchors the line to the body, so it tracks as you turn.
 
-Units are blocks, so the numbers are small. Something like `0.1` is already a noticeable shift.
-Because the offset is rotated by your current view every frame, it tracks correctly as you look
-around — you don't need a different value per facing direction.
+Units are blocks, so the numbers are small — `0.1` is already a noticeable shift. The two offsets are
+saved separately, and `worldDelta` automatically picks the right one based on the active camera.
 
-> A single offset can't be *perfect* at every pitch (the vanilla origin isn't exactly at the camera),
-> but for a fixed first-person rod it gets the line visually attached to the tip. Tune it while
-> looking roughly level, then sanity-check looking up/down.
+> A single offset per view can't be *perfect* in every situation (the vanilla origin isn't exactly at
+> the camera, and the third-person value keys off the body rather than the live arm-swing animation),
+> but it gets the line visually attached to the tip. Tune first person looking roughly level; tune
+> third person while standing still.
 
 ---
 
@@ -88,14 +92,19 @@ launch a dev client with the mod loaded, handy for testing without copying the j
 1. Make sure **Fabric Loader 0.18.6+** and **Fabric API `0.145.4+26.1.1`** are installed for 26.1.1.
 2. Drop `adjustrod-1.0.0.jar` into your `.minecraft/mods` folder (alongside Fabric API).
 3. Launch, load a world, hold your rod and cast.
-4. Tune:
+4. Tune first person:
    ```
    /adjustrod 0.05 0.1 0.2
    ```
    The change is live — you'll see the next rendered frame use it. Cast again if a bobber is already out.
-5. Iterate `x y z` until the line leaves the rod tip. `/adjustrod show` reminds you of the current value; `/adjustrod reset` zeroes it.
+5. Iterate `x y z` until the line leaves the rod tip.
+6. (Optional) Switch to third person and tune that view separately, standing still:
+   ```
+   /adjustrod third 0.0 0.1 0.3
+   ```
+7. `/adjustrod show` prints both offsets; `/adjustrod reset` zeroes both.
 
-The value is stored in `.minecraft/config/adjustrod.json` and reloaded on every boot.
+Both values are stored in `.minecraft/config/adjustrod.json` and reloaded on every boot.
 
 ---
 
