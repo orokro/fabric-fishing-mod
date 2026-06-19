@@ -1,0 +1,29 @@
+{
+	"schemaVersion": 1,
+	"id": "adjustrod",
+	"version": "${version}",
+	"name": "AdjustRod",
+	"description": "Adds a tunable, persistent offset to the fishing line's cast origin so the line lines up with a custom fishing rod model's tip.",
+	"authors": [
+		"Greg"
+	],
+	"license": "MIT",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"com.example.adjustrod.AdjustRodClient"
+		]
+	},
+	"mixins": [
+		{
+			"config": "adjustrod.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.19.2",
+		"minecraft": "~26.1",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}

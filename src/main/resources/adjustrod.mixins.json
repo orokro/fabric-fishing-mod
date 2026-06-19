@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "com.example.adjustrod.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"client": [
+		"FishingHookRendererMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
