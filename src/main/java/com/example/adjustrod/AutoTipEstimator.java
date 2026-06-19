@@ -140,7 +140,7 @@ public final class AutoTipEstimator {
 			double up = round(v.y);
 			double forward = round(-v.z);
 
-			AdjustRodConfig.set(right, up, forward);
+			AdjustRodConfig.setFirstPerson(right, up, forward);
 			source.sendFeedback(Component.literal(String.format(
 					"[adjustrod] AUTO estimate from %s -> right=%.3f, up=%.3f, forward=%.3f (saved). "
 							+ "This is a starting point; fine-tune with /adjustrod x y z.",
